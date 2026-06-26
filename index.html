@@ -112,7 +112,7 @@
 
   /* pricing */
   .pricing{background:var(--mist)}
-  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px;align-items:start}
+  .plans{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px;align-items:start}
   .plan{background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px}
   .plan.pop{border:2px solid var(--red);box-shadow:0 20px 50px rgba(228,50,43,.12);position:relative}
   .badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;font-size:12.5px;font-weight:700;padding:6px 14px;border-radius:999px}
@@ -232,7 +232,7 @@
     <div class="center"><h2>Что умеет Satushi</h2><p class="lead">Не просто демпинг-бот, а система, которая защищает вашу прибыль и магазин.</p></div>
     <div class="grid g3" style="margin-top:44px">
       <div class="card"><div class="ic ic-teal">◆</div><h3>Реальная прибыль по FIFO</h3><p>Чистая прибыль по каждому товару с учётом комиссии Kaspi, налога, KaspiPay, доставки и себестоимости по реальным партиям закупки.</p></div>
-      <div class="card"><div class="ic ic-teal">🛡</div><h3>Guard — защита от отмен</h3><p>Снимает товар с витрины заранее, по скорости продаж, пока вы не ушли в минус. Меньше отмен → здоровее магазин.</p></div>
+      <div class="card"><div class="ic ic-teal">🛡</div><h3>Guard — защита от отмен</h3><p>Потолок отмен на Kaspi — <b>3%</b>: одна лишняя отмена = риск санкций. Guard снимает товар с витрины заранее, по скорости продаж, и держит вас ниже порога.</p></div>
       <div class="card"><div class="ic ic-amber">⚡</div><h3>Автодемпинг</h3><p>Держит цену чуть ниже конкурента, но не ниже вашей границы прибыли. Топ выдачи — без работы в убыток.</p></div>
       <div class="card"><div class="ic ic-ink">▦</div><h3>Склад и комплекты</h3><p>Остатки, варианты и наборы, FIFO-лоты, привязка к точкам Kaspi. Никакого ручного хаоса в таблицах.</p></div>
       <div class="card"><div class="ic ic-ink">📊</div><h3>Аналитика ABC / XYZ</h3><p>Что продавать, что заканчивается, где вы теряете деньги. Топ прибыльных и убыточных товаров.</p></div>
@@ -266,16 +266,55 @@
   </div>
 </section>
 
+<section id="roi">
+  <div class="wrap" style="max-width:840px">
+    <div class="center"><h2>Сколько Kaspi удерживает из вашего оборота?</h2>
+    <p class="lead">Kaspi показывает оборот, а не прибыль. Прикиньте удержания, которых не видно на глаз.</p></div>
+    <div style="background:var(--mist);border:1px solid var(--line);border-radius:16px;padding:28px;margin-top:26px">
+      <label style="font-weight:600;font-size:15px">Ваш оборот на Kaspi в месяц, ₸</label>
+      <input id="rev" type="number" value="3000000" min="0" step="100000"
+        style="width:100%;font-size:18px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;margin:10px 0 18px;font-family:inherit">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+        <div class="mcard"><div class="l">Комиссия Kaspi (~12%)</div><div class="v" id="rcom">—</div></div>
+        <div class="mcard"><div class="l">НДС 16% на комиссию</div><div class="v" id="rnds">—</div></div>
+        <div class="mcard"><div class="l">KaspiPay (0.95%)</div><div class="v" id="rpay">—</div></div>
+        <div class="mcard"><div class="l">Итого удержаний / мес</div><div class="v" style="color:var(--red)" id="rtot">—</div></div>
+      </div>
+      <p style="color:var(--mute);font-size:14px;margin-top:16px">+ себестоимость (по партиям) и доставка.
+      <b style="color:var(--ink)">Satushi считает чистую прибыль по каждому товару автоматически — с учётом нового НДС 16%.</b></p>
+    </div>
+  </div>
+</section>
+<script>
+(function(){var f=new Intl.NumberFormat('ru-RU');function c(){var r=+document.getElementById('rev').value||0,
+com=r*0.12,nds=com*0.16,pay=r*0.0095,t=com+nds+pay;
+document.getElementById('rcom').textContent=f.format(Math.round(com))+' ₸';
+document.getElementById('rnds').textContent=f.format(Math.round(nds))+' ₸';
+document.getElementById('rpay').textContent=f.format(Math.round(pay))+' ₸';
+document.getElementById('rtot').textContent=f.format(Math.round(t))+' ₸';}
+document.getElementById('rev').addEventListener('input',c);c();})();
+</script>
+
 <section id="pricing" class="pricing">
   <div class="wrap">
     <div class="center"><h2>Простые тарифы</h2><p class="lead">7 дней бесплатно. Оплата начинается только после триала.</p></div>
     <div class="plans">
       <div class="plan">
-        <h3>Старт</h3><div class="who">Для начинающих продавцов</div>
-        <div class="price">9 900 ₸<small> / мес</small></div>
+        <h3>Free</h3><div class="who">Познакомиться и посчитать</div>
+        <div class="price">0 ₸</div>
         <ul>
-          <li><span class="tick">✓</span> Реальная прибыль и аналитика</li>
-          <li><span class="tick">✓</span> Складской учёт и комплекты</li>
+          <li><span class="tick">✓</span> Калькулятор реальной прибыли</li>
+          <li><span class="tick">✓</span> Чек-лист NTIN / НКТ</li>
+          <li><span class="tick">✓</span> Мини-аудит магазина</li>
+        </ul>
+        <a class="btn btn-dark" href="#">Начать бесплатно</a>
+      </div>
+      <div class="plan">
+        <h3>Starter</h3><div class="who">Старт, до 100 товаров</div>
+        <div class="price">12 900 ₸<small> / мес</small></div>
+        <ul>
+          <li><span class="tick">✓</span> Аналитика продаж</li>
+          <li><span class="tick">✓</span> Автодемпинг</li>
           <li><span class="tick">✓</span> Guard — защита от отмен</li>
           <li><span class="tick">✓</span> Поддержка в чате</li>
         </ul>
@@ -283,24 +322,24 @@
       </div>
       <div class="plan pop">
         <span class="badge">Популярный</span>
-        <h3>Бизнес</h3><div class="who">Для растущего магазина</div>
-        <div class="price">19 900 ₸<small> / мес</small></div>
+        <h3>Core</h3><div class="who">Растущий магазин, до 1000 SKU</div>
+        <div class="price">29 900 ₸<small> / мес</small></div>
         <ul>
-          <li><span class="tick">✓</span> Всё из «Старт»</li>
-          <li><span class="tick">✓</span> Автодемпинг по правилам</li>
-          <li><span class="tick">✓</span> ABC / XYZ-анализ и сезонность</li>
-          <li><span class="tick">✓</span> Приоритетная поддержка</li>
+          <li><span class="tick">✓</span> Всё из «Starter»</li>
+          <li><span class="tick">✓</span> Реальная прибыль по FIFO</li>
+          <li><span class="tick">✓</span> Склад, заказы, комплекты</li>
+          <li><span class="tick">✓</span> ABC / XYZ-анализ</li>
         </ul>
         <a class="btn btn-red" href="#">Попробовать 7 дней</a>
       </div>
       <div class="plan">
-        <h3>Команда</h3><div class="who">Для бизнеса с командой и складами</div>
-        <div class="price">39 900 ₸<small> / мес</small></div>
+        <h3>Pro</h3><div class="who">Команда и склады</div>
+        <div class="price">59 900 ₸<small> / мес</small></div>
         <ul>
-          <li><span class="tick">✓</span> Всё из «Бизнес»</li>
-          <li><span class="tick">✓</span> Интеграции 1С / МойСклад, API</li>
-          <li><span class="tick">✓</span> Прогноз закупок и мультисклад</li>
-          <li><span class="tick">✓</span> Сотрудники и права доступа</li>
+          <li><span class="tick">✓</span> Всё из «Core»</li>
+          <li><span class="tick">✓</span> Мультисклад, сотрудники</li>
+          <li><span class="tick">✓</span> WhatsApp-отзывы</li>
+          <li><span class="tick">✓</span> Интеграции 1С / МойСклад</li>
         </ul>
         <a class="btn btn-dark" href="#">Попробовать 7 дней</a>
       </div>
